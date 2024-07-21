@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kayıt Ol</title>
+    <link rel="stylesheet" href="styles.css"> <!-- CSS dosyanızı buraya ekleyin -->
+</head>
+<body>
+    <div class="container">
+        <h2>Kayıt Ol</h2>
+        <form action="/register" method="POST">
+            <label for="email">E-posta:</label>
+            <input type="email" id="email" name="email" required>
+            
+            <label for="password">Şifre:</label>
+            <input type="password" id="password" name="password" required>
+            
+            <label for="confirmPassword">Şifreyi Tekrar Girin:</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" required>
+            
+            <button type="submit">Kayıt Ol</button>
+        </form>
+        <p>Zaten hesabınız var mı? <a href="login.html">Giriş Yapın</a></p> <!-- giriş sayfasına yönlendirme -->
+    </div>
+</body>
+</html>
