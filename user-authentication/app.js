@@ -1,64 +1,60 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const path = require('path');
-
+const bodyParser = require('body-parser');
 const app = express();
 const PORT = 3000;
 
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views')); // views dizinini ayarlama
 
-
-// Example users
+// Kullanıcı veritabanı (örnek olarak)
 const users = [
-    {email: "mikeanderson32@gmail.com", password: "MikeyAnd32."},
-    {email: "mikeanderson33@gmail.com", password: "MikeyAnd33."}
+    { email: 'user1@example.com', password: 'pass1' },
+    { email: 'user2@example.com', password: 'pass2' }
 ];
 
-// Main page route
-app.get('/', (request, response) => {
-    response.redirect('/login');
+// Ana sayfa rotası
+app.get('/', (req, res) => {
+    res.redirect('/login');
 });
 
-// Rendering login page
-app.get('/login', (request, response) => {
-    response.render('login');
+// Login sayfasını render et
+app.get('/login', (req, res) => {
+    res.render('login', { message: '', messageType: '' });
 });
 
-// Rendering signup page
-app.get('/signup', (request, response) => {
-    response.render('signup');
+// Sign Up sayfasını render et
+app.get('/signup', (req, res) => {
+    res.render('signup', { message: '', messageType: '' });
 });
 
-// Login process
-app.post('/login', (request, response) => {
-    const {email, password} = request.body;
-    const user = users.find(user => user.email === email && user.password === password);
+// Login işlemi
+app.post('/login', (req, res) => {
+    const { email, password } = req.body;
+    const user = users.find(u => u.email === email && u.password === password);
 
     if (user) {
-        response.send('Login successful!');
-    }
-    else {
-        response.send('Invalid username or password.');
+        res.render('login', { message: 'Login successful!', messageType: 'success' });
+    } else {
+        res.render('login', { message: 'Invalid email or password.', messageType: 'error' });
     }
 });
 
-// Sign Up Process
-app.post('/signup', (request, response) => {
-    const {email, password} = request.body;
-    const userExists = users.find(user => user.email === email);
+// Sign Up işlemi
+app.post('/signup', (req, res) => {
+    const { email, password } = req.body;
+    const userExists = users.find(u => u.email === email);
 
     if (userExists) {
-        response.send('User already exists!');
-    } 
-    else {
-        users.push({email, password});
-        response.send('User created!');
+        res.render('signup', { message: 'Email already exists.', messageType: 'error' });
+    } else {
+        users.push({ email, password });
+        res.render('signup', { message: 'Sign up successful! You can now log in.', messageType: 'success' });
     }
 });
 
-
 app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+    console.log(`Server is running on http://localhost:${PORT}`);
 });
